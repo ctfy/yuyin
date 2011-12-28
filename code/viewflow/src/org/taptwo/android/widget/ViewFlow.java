@@ -56,7 +56,7 @@ public class ViewFlow extends AdapterView<Adapter> {
 	private int mCurrentBufferIndex;
 	private int mCurrentAdapterIndex;
 	private int mSideBuffer = 2;
-	private Scroller mScroller;
+	public Scroller mScroller;
 	private VelocityTracker mVelocityTracker;
 	private int mTouchState = TOUCH_STATE_REST;
 	private float mLastMotionX;

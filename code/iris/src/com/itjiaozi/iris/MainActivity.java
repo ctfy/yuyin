@@ -90,23 +90,20 @@ public class MainActivity extends Activity {
         switch (id) {
         case R.id.itjiaozi_the_main_view_animator_child_btns_call:
             TaskViewManager.setDisplayTaskView("打电话");
-            mViewFlow.setAdapter(mViewFlow.getAdapter(), 1);
-            // mViewFlow.postViewSwitched(1);
-            fff();
+            mViewFlow.snapToScreen(1);
             break;
         case R.id.itjiaozi_the_main_view_animator_child_btns_message:
             TaskViewManager.setDisplayTaskView("发短信");
-            mViewFlow.setSelection(1);
-
+            mViewFlow.snapToScreen(1);
             break;
         case R.id.itjiaozi_the_main_view_animator_child_btns_openapp:
             TaskViewManager.setDisplayTaskView("打开应用");
-            mViewFlow.setSelection(1);
+            mViewFlow.snapToScreen(1);
 
             break;
         case R.id.itjiaozi_the_main_view_animator_child_btns_websearch:
             // TaskViewManager.setDisplayTaskView("网络搜索");
-            mViewFlow.setSelection(1);
+            mViewFlow.snapToScreen(1);
 
             break;
 
