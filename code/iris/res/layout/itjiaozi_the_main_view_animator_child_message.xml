@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/textView1"
         android:layout_weight="1"
+        android:focusable="false"
         android:hint="联系人" />
 
     <EditText
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText1"
         android:layout_weight="1"
+        android:focusable="false"
         android:hint="短信内容"
         android:lines="4" />
 

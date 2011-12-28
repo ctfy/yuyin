@@ -398,7 +398,7 @@ public class ViewFlow extends AdapterView<Adapter> {
 		snapToScreen(whichScreen);
 	}
 
-	private void snapToScreen(int whichScreen) {
+	public void snapToScreen(int whichScreen) {
 		mLastScrollDirection = whichScreen - mCurrentScreen;
 		if (!mScroller.isFinished())
 			return;
@@ -573,7 +573,7 @@ public class ViewFlow extends AdapterView<Adapter> {
 		requestLayout();
 	}
 
-	private void postViewSwitched(int direction) {
+	public void postViewSwitched(int direction) {
 		if (direction == 0)
 			return;
 

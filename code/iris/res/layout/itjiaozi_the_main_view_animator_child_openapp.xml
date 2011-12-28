@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/textView1"
         android:layout_weight="1"
+        android:focusable="false"
         android:hint="应用名" />
 
     <ListView

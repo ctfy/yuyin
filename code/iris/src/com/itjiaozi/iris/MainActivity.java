@@ -8,6 +8,9 @@ import org.taptwo.android.widget.ViewFlow;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -48,8 +51,70 @@ public class MainActivity extends Activity {
         mViewFlow.setAdapter(ca);
     }
 
+    private void fff() {
+        Message msg = Message.obtain();
+        MotionEvent ev = MotionEvent.obtain(1, 1, MotionEvent.ACTION_DOWN, 100, 100, -1);
+        mHandler.sendMessage(msg);
+
+    }
+
+    private Handler mHandler = new Handler() {
+        private int count = 0;
+
+        public void handleMessage(android.os.Message msg) {
+            MotionEvent ev = (MotionEvent) msg.obj;
+            mViewFlow.onInterceptTouchEvent(ev);
+            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+                count = 0;
+                msg.obj = ev;
+                ev.setAction(MotionEvent.ACTION_MOVE);
+                sendMessage(msg);
+            } else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+                count += 1;
+                msg.obj = ev;
+                if (count > 20) {
+                    sendMessage(msg);
+                    ev.setAction(MotionEvent.ACTION_UP);
+                } else {
+                    ev.setAction(MotionEvent.ACTION_MOVE);
+                    ev.setLocation(ev.getX() + 5, ev.getY());
+                }
+            } else if (ev.getAction() == MotionEvent.ACTION_UP) {
+                count = 0;
+            }
+        };
+    };
+
     public void onClick(View v) {
-        startRecoginze(ETheAiType.App);
+        int id = v.getId();
+        switch (id) {
+        case R.id.itjiaozi_the_main_view_animator_child_btns_call:
+            TaskViewManager.setDisplayTaskView("打电话");
+            mViewFlow.setAdapter(mViewFlow.getAdapter(), 1);
+            // mViewFlow.postViewSwitched(1);
+            fff();
+            break;
+        case R.id.itjiaozi_the_main_view_animator_child_btns_message:
+            TaskViewManager.setDisplayTaskView("发短信");
+            mViewFlow.setSelection(1);
+
+            break;
+        case R.id.itjiaozi_the_main_view_animator_child_btns_openapp:
+            TaskViewManager.setDisplayTaskView("打开应用");
+            mViewFlow.setSelection(1);
+
+            break;
+        case R.id.itjiaozi_the_main_view_animator_child_btns_websearch:
+            // TaskViewManager.setDisplayTaskView("网络搜索");
+            mViewFlow.setSelection(1);
+
+            break;
+
+        default:
+            break;
+        }
+
+        // startRecoginze(ETheAiType.App);
         // mViewAnimator.setDisplayedChild(1);
     }
 
