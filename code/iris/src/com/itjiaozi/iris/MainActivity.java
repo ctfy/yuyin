@@ -2,16 +2,15 @@ package com.itjiaozi.iris;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import org.taptwo.android.widget.ViewFlow;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.widget.Gallery;
-import android.widget.SimpleAdapter;
-import android.widget.ViewAnimator;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 
 import com.iflytek.speech.RecognizerResult;
 import com.iflytek.speech.SpeechError;
@@ -24,30 +23,43 @@ import com.itjiaozi.iris.ai.ETheAiType;
 import com.itjiaozi.iris.ai.TheAiManager;
 import com.itjiaozi.iris.util.SPUtil;
 import com.itjiaozi.iris.util.ToastUtil;
+import com.itjiaozi.iris.view.task.TaskViewCall;
+import com.itjiaozi.iris.view.task.TaskViewManager;
+import com.itjiaozi.iris.view.task.TaskViewMessage;
+import com.itjiaozi.iris.view.task.TaskViewOpenApp;
 
 public class MainActivity extends Activity {
-    ViewAnimator mViewAnimator;
+    ViewFlow mViewFlow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.itjiaozi_the_main);
+        mViewFlow = (ViewFlow) findViewById(R.id.viewflow);
 
-        mViewAnimator = (ViewAnimator) findViewById(R.id.ViewAnimator1);
+        TaskViewManager.init(this);
+        TaskViewManager.addTaskView("打电话", new TaskViewCall(this, null));
+        TaskViewManager.addTaskView("发短信", new TaskViewMessage(this, null));
+        TaskViewManager.addTaskView("打开应用", new TaskViewOpenApp(this, null));
+        ContentAdapter ca = new ContentAdapter();
+        ca.addItemView(View.inflate(this, R.layout.itjiaozi_the_main_view_animator_child_btns, null));
+        ca.addItemView(TaskViewManager.getManagerView());
+
+        mViewFlow.setAdapter(ca);
     }
 
     public void onClick(View v) {
         startRecoginze(ETheAiType.App);
-        mViewAnimator.setDisplayedChild(1);
+        // mViewAnimator.setDisplayedChild(1);
     }
 
     @Override
     public void onBackPressed() {
-        if (mViewAnimator.getDisplayedChild() != 0) {
-            mViewAnimator.setDisplayedChild(0);
-        } else {
-            super.onBackPressed();
-        }
+        // if (mViewAnimator.getDisplayedChild() != 0) {
+        // mViewAnimator.setDisplayedChild(0);
+        // } else {
+        super.onBackPressed();
+        // }
     }
 
     public void startRecoginze(final ETheAiType eTheAiType) {
@@ -115,5 +127,34 @@ public class MainActivity extends Activity {
 
     public void onResult(String str) {
         ToastUtil.showToast(str);
+    }
+
+    public static class ContentAdapter extends BaseAdapter {
+
+        private List<View> list = new ArrayList<View>();
+
+        public void addItemView(View view) {
+            list.add(view);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
     }
 }

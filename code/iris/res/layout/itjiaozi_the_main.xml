@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.itjiaozi.iris"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/itjiaozi_the_main_bg"
     android:orientation="vertical" >
+<!-- 
+    <org.taptwo.android.widget.CircleFlowIndicator
+        android:id="@+id/viewflowindic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dip" /> -->
 
-    <ViewAnimator
-        android:id="@+id/ViewAnimator1"
+    <org.taptwo.android.widget.ViewFlow
+        android:id="@+id/viewflow"
         android:layout_width="fill_parent"
-        android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right"
         android:layout_height="fill_parent" >
-
-        <include layout="@layout/itjiaozi_the_main_view_animator_child_btns" />
-
-        <include layout="@layout/itjiaozi_the_main_view_animator_child_openapp" />
-
-        <include layout="@layout/itjiaozi_the_main_view_animator_child_message" />
-
-        <include layout="@layout/itjiaozi_the_main_view_animator_child_call" />
-    </ViewAnimator>
+    </org.taptwo.android.widget.ViewFlow>
 
     <Button
         android:id="@+id/speekButton"
