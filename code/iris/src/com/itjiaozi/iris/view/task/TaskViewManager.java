@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ViewAnimator;
 
 public class TaskViewManager {
@@ -20,6 +21,7 @@ public class TaskViewManager {
     private static ViewAnimator mViewAnimator;
     private static HashMap<String, View> maps = new HashMap<String, View>();
     private static HashMap<String, Integer> indexs = new HashMap<String, Integer>();
+    private static String currentSelectTaskViewName = null;
 
     public static void init(Activity context) {
         mViewAnimator = new ViewAnimator(context);
@@ -63,9 +65,21 @@ public class TaskViewManager {
         return view;
     }
 
+    public static ITaskView getTaskViewInterface(String taskname) {
+        View v = getTaskView(taskname);
+        if (null == v) {
+            throw new NullPointerException("不存在名字为" + taskname + "的view!");
+        }
+        if (!(v instanceof ITaskView)) {
+            throw new ClassCastException("不能将view转换成ITaskView");
+        }
+        return (ITaskView) v;
+    }
+
     public static void setDisplayTaskView(String taskname) {
         Integer index = indexs.get(taskname);
         mViewAnimator.setDisplayedChild(index);
+        currentSelectTaskViewName = taskname;
     }
 
     /***
@@ -82,5 +96,10 @@ public class TaskViewManager {
             throw new NullPointerException("未初始化TaskViewManager");
         }
         return mViewAnimator;
+    }
+
+    public static void performSpeechClick(Button v) {
+        ITaskView itv = getTaskViewInterface(currentSelectTaskViewName);
+        itv.onSpeechBtnClick(v);
     }
 }

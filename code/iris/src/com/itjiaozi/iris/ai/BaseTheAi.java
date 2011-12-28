@@ -1,11 +1,21 @@
 package com.itjiaozi.iris.ai;
 
+import android.view.View;
+
 import com.itjiaozi.iris.util.SPUtil;
 
 public abstract class BaseTheAi {
     public abstract void onLoad();
 
     public abstract void onUnLoad();
+
+    public abstract void onShow();
+
+    public abstract void onHide();
+
+    public View.OnClickListener getSpeechBtnOnClickListener() {
+        return null;
+    }
 
     public abstract String getKeysString();
 

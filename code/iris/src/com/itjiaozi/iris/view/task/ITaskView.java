@@ -1,5 +1,7 @@
 package com.itjiaozi.iris.view.task;
 
-public interface ITaskView {
+import android.widget.Button;
 
+public interface ITaskView {
+    void onSpeechBtnClick(Button btn);
 }

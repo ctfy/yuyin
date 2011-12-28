@@ -1,5 +1,9 @@
 package com.itjiaozi.iris;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
+
 import com.itjiaozi.iris.about.TheApps;
 import com.itjiaozi.iris.about.TheContacts;
 import com.itjiaozi.iris.ai.TheAiManager;
@@ -7,12 +11,22 @@ import com.itjiaozi.iris.db.EADbHelper;
 import com.itjiaozi.iris.service.TheService;
 import com.itjiaozi.iris.util.SPUtil;
 
-import android.app.Application;
-import android.content.Intent;
-
 public class TheApplication extends Application {
     private static final String TAG = TheApplication.class.getSimpleName();
     private static TheApplication INSTANCE;
+
+    private Activity mCurrentActivity;
+
+    public Activity getCurrentActivity() {
+        if (null == mCurrentActivity) {
+            throw new NullPointerException("无法获取activity");
+        }
+        return mCurrentActivity;
+    }
+
+    public void setCurrentActivity(Activity currentActivity) {
+        mCurrentActivity = currentActivity;
+    }
 
     public static TheApplication getInstance() {
         return INSTANCE;

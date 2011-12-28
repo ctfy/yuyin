@@ -2,6 +2,8 @@ package com.itjiaozi.iris.ai;
 
 import java.util.HashMap;
 
+import android.view.View;
+
 public class TheAiManager {
     private static TheAiManager instance;
 
@@ -12,7 +14,7 @@ public class TheAiManager {
         maps.put(ETheAiType.Call, new TheAiCall());
         maps.put(ETheAiType.Message, new TheAiMessage());
         maps.put(ETheAiType.App, new TheAiApp());
-        
+
         for (BaseTheAi t : maps.values()) {
             t.onLoad();
         }
@@ -28,5 +30,17 @@ public class TheAiManager {
     public BaseTheAi getTheAi(ETheAiType eTheAiType) {
         BaseTheAi tBaseTheAi = maps.get(eTheAiType);
         return tBaseTheAi;
+    }
+
+    public View.OnClickListener getSpeechBtnOnClickListener() {
+        return null;
+    }
+
+    public static interface ICallback {
+        void onResult(boolean success, String result);
+    }
+
+    public void startRecognize(ETheAiType eTheAiType, ICallback callback) {
+        
     }
 }

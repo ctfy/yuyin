@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 
 import com.iflytek.speech.RecognizerResult;
 import com.iflytek.speech.SpeechError;
@@ -37,6 +38,8 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TheApplication.getInstance().setCurrentActivity(this);
+
         setContentView(R.layout.itjiaozi_the_main);
         mViewFlow = (ViewFlow) findViewById(R.id.viewflow);
 
@@ -105,6 +108,10 @@ public class MainActivity extends Activity {
             // TaskViewManager.setDisplayTaskView("网络搜索");
             mViewFlow.snapToScreen(1);
 
+            break;
+
+        case R.id.speekButton:
+            TaskViewManager.performSpeechClick((Button) v);
             break;
 
         default:
@@ -218,5 +225,11 @@ public class MainActivity extends Activity {
         public long getItemId(int position) {
             return position;
         }
+    }
+
+    @Override
+    public void finish() {
+        TheApplication.getInstance().setCurrentActivity(null);
+        super.finish();
     }
 }
