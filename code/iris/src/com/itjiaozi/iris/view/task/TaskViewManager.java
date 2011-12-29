@@ -1,11 +1,20 @@
 package com.itjiaozi.iris.view.task;
 
 import java.util.HashMap;
+import java.util.List;
 
+import jregex.Pattern;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ViewAnimator;
+
+import com.iflytek.speech.SpeechError;
+import com.itjiaozi.iris.about.TheApps;
+import com.itjiaozi.iris.about.TheContacts;
+import com.itjiaozi.iris.db.TbAppCache;
+import com.itjiaozi.iris.db.TbContactCache;
+import com.itjiaozi.iris.util.OSUtil;
 
 public class TaskViewManager {
 
@@ -46,7 +55,7 @@ public class TaskViewManager {
             throw new IllegalStateException("任务view必须实现ITaskView" + "接口");
         }
         maps.put(taskname, iTaskView);
-        indexs.put(taskname, indexs.size());
+        indexs.put(taskname, indexs.size() + 0);
         mViewAnimator.addView(iTaskView);
     }
 
@@ -82,6 +91,14 @@ public class TaskViewManager {
         currentSelectTaskViewName = taskname;
     }
 
+    public static void setDisplayTaskView(String taskname, String... args) {
+        Integer index = indexs.get(taskname);
+        mViewAnimator.setDisplayedChild(index);
+        currentSelectTaskViewName = taskname;
+
+        getTaskViewInterface(taskname).setData(args);
+    }
+
     /***
      * 清空状态
      */
@@ -101,5 +118,45 @@ public class TaskViewManager {
     public static void performSpeechClick(Button v) {
         ITaskView itv = getTaskViewInterface(currentSelectTaskViewName);
         itv.onSpeechBtnClick(v);
+    }
+
+    public static boolean executeTask(SpeechError error, int confidence, String result) {
+        {
+            jregex.Pattern pattern = new Pattern("打电话给({name}.*)");
+            jregex.Matcher matcher = pattern.matcher(result);
+            if (matcher.find()) {
+                String name = matcher.group("name");
+                List<TbContactCache> list = TheContacts.query(name);
+                if (confidence > 60 && list.size() > 0) {
+                    OSUtil.startCall(list.get(0).Number);
+                    return false;
+                } else {
+                    TaskViewManager.setDisplayTaskView("打电话", name);
+                }
+            }
+        }
+        {
+            jregex.Pattern pattern = new Pattern("发短信给({name}.*)");
+            jregex.Matcher matcher = pattern.matcher(result);
+            if (matcher.find()) {
+                String name = matcher.group("name");
+                TaskViewManager.setDisplayTaskView("发短信", name);
+            }
+        }
+        {
+            jregex.Pattern pattern = new Pattern("打开({name}.*)");
+            jregex.Matcher matcher = pattern.matcher(result);
+            if (matcher.find()) {
+                String name = matcher.group("name");
+                List<TbAppCache> list = TheApps.query(name);
+                if (confidence > 60 && list.size() > 0) {
+                    OSUtil.startApp(list.get(0).PackageName);
+                    return false;
+                } else {
+                    TaskViewManager.setDisplayTaskView("打开应用", name);
+                }
+            }
+        }
+        return true;
     }
 }

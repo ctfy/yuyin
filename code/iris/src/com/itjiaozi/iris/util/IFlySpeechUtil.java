@@ -2,7 +2,6 @@ package com.itjiaozi.iris.util;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Observer;
 
 import com.iflytek.speech.RecognizerResult;
 import com.iflytek.speech.SpeechError;
@@ -17,7 +16,12 @@ import com.itjiaozi.iris.ai.ETheAiType;
 import com.itjiaozi.iris.ai.TheAiManager;
 
 public class IFlySpeechUtil {
-    public static void startRecoginze(final ETheAiType eTheAiType, final Observer result) {
+
+    public static interface IRecoginzeResult {
+        void onCallback(SpeechError error, int confidence, String result);
+    }
+
+    public static void startRecoginze(final ETheAiType eTheAiType, final IRecoginzeResult callback) {
         final BaseTheAi bta = TheAiManager.getInstance().getTheAi(eTheAiType);
 
         if (bta.getIsNeedUploadKeys()) {
@@ -29,6 +33,7 @@ public class IFlySpeechUtil {
                     if (null != error) {
                         ToastUtil.showToast("数据上传错误：" + error);
                     }
+                    callback.onCallback(error, 0, null);
                 }
 
                 @Override
@@ -50,19 +55,26 @@ public class IFlySpeechUtil {
             rd.setListener(new RecognizerDialogListener() {
 
                 StringBuilder sb = new StringBuilder();
+                int confidenceTotal = 0;
+                int resultCount = 0;
 
                 @Override
                 public void onResults(ArrayList<RecognizerResult> results, boolean isLast) {
                     if (null != results && results.size() > 0) {
                         sb.append(results.get(0).text);
+                        confidenceTotal += results.get(0).confidence;
+                        resultCount += 1;
                     }
                     if (isLast) {
-                        String ret = sb.toString();
-                        if (null != result) {
-                            ToastUtil.showToast("" + sb);
-                            result.update(null, ret);
-                        }
+                        String recognizeStr = sb.toString();
+                        int confidence = confidenceTotal / resultCount;
+                        ToastUtil.showToast("识别结果（识别率=" + confidence + "）：" + sb + "");
+
+                        callback.onCallback(null, confidence, recognizeStr);
+
                         sb = new StringBuilder();
+                        confidenceTotal = 0;
+                        resultCount = 0;
                     }
                 }
 
@@ -70,6 +82,7 @@ public class IFlySpeechUtil {
                 public void onEnd(SpeechError error) {
                     if (null != error) {
                         ToastUtil.showToast("识别错误：" + error);
+                        callback.onCallback(error, 0, null);
                     }
                 }
             });

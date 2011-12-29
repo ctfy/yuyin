@@ -27,17 +27,21 @@ public class BootReceiver extends BroadcastReceiver {
         // 接收广播：设备上新安装了一个应用程序包后自动启动新安装应用程序。
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String packageName = intent.getDataString().substring(8);
-            try {
-                PackageInfo pi = TheApplication.getInstance().getPackageManager().getPackageInfo(packageName, 0);
-                TheApps.updateAppInfo(packageName);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (!"com.itjiaozi.iris".equals(packageName)) {
+                try {
+                    PackageInfo pi = TheApplication.getInstance().getPackageManager().getPackageInfo(packageName, 0);
+                    TheApps.updateAppInfo(packageName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         // 接收广播：设备上删除了一个应用程序包。
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
             String packageName = intent.getDataString().substring(8);
-            TheApps.deletePackage(packageName);
+            if (!"com.itjiaozi.iris".equals(packageName)) {
+                TheApps.deletePackage(packageName);
+            }
         }
     }
 }

@@ -54,23 +54,4 @@ public class TheAiMessage extends BaseTheAi {
         // TODO Auto-generated method stub
 
     };
-
-    @Override
-    public OnClickListener getSpeechBtnOnClickListener() {
-        return mSpeechBtnClickListener;
-    }
-
-    private View.OnClickListener mSpeechBtnClickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            TheAiManager.getInstance().startRecognize(ETheAiType.All, new ICallback() {
-
-                @Override
-                public void onResult(boolean success, String result) {
-
-                }
-            });
-        }
-    };
 }

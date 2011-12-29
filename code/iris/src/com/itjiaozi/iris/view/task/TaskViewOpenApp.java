@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.iflytek.speech.SpeechError;
 import com.itjiaozi.iris.R;
 import com.itjiaozi.iris.ai.ETheAiType;
 import com.itjiaozi.iris.util.IFlySpeechUtil;
+import com.itjiaozi.iris.util.IFlySpeechUtil.IRecoginzeResult;
 
 public class TaskViewOpenApp extends LinearLayout implements ITaskView {
 
@@ -27,15 +29,21 @@ public class TaskViewOpenApp extends LinearLayout implements ITaskView {
     @Override
     public void onSpeechBtnClick(final Button btn) {
         btn.setText("请说应用名");
-        IFlySpeechUtil.startRecoginze(ETheAiType.App, new Observer() {
+        IFlySpeechUtil.startRecoginze(ETheAiType.Call, new IRecoginzeResult() {
 
             @Override
-            public void update(Observable o, Object arg) {
-                String str = (String) arg;
-                editTextAppName.setText(str);
+            public void onCallback(SpeechError error, int confidence, String result) {
+                editTextAppName.setText(result);
                 btn.setText("点击说话");
             }
         });
+    }
+
+    @Override
+    public void setData(String... args) {
+        if (null != args && args.length > 0) {
+            editTextAppName.setText(args[0]);
+        }
     }
 
 }

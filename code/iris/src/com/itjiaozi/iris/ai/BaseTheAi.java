@@ -13,10 +13,6 @@ public abstract class BaseTheAi {
 
     public abstract void onHide();
 
-    public View.OnClickListener getSpeechBtnOnClickListener() {
-        return null;
-    }
-
     public abstract String getKeysString();
 
     public boolean getIsNeedUploadKeys() {

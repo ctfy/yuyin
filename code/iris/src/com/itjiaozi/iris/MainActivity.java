@@ -1,31 +1,25 @@
 package com.itjiaozi.iris;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import jregex.Pattern;
 
 import org.taptwo.android.widget.ViewFlow;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 
-import com.iflytek.speech.RecognizerResult;
 import com.iflytek.speech.SpeechError;
-import com.iflytek.ui.RecognizerDialog;
-import com.iflytek.ui.RecognizerDialogListener;
-import com.iflytek.ui.UploadDialog;
-import com.iflytek.ui.UploadDialogListener;
-import com.itjiaozi.iris.ai.BaseTheAi;
 import com.itjiaozi.iris.ai.ETheAiType;
-import com.itjiaozi.iris.ai.TheAiManager;
-import com.itjiaozi.iris.util.SPUtil;
+import com.itjiaozi.iris.util.IFlySpeechUtil;
+import com.itjiaozi.iris.util.IFlySpeechUtil.IRecoginzeResult;
 import com.itjiaozi.iris.util.ToastUtil;
 import com.itjiaozi.iris.view.task.TaskViewCall;
 import com.itjiaozi.iris.view.task.TaskViewManager;
@@ -54,40 +48,6 @@ public class MainActivity extends Activity {
         mViewFlow.setAdapter(ca);
     }
 
-    private void fff() {
-        Message msg = Message.obtain();
-        MotionEvent ev = MotionEvent.obtain(1, 1, MotionEvent.ACTION_DOWN, 100, 100, -1);
-        mHandler.sendMessage(msg);
-
-    }
-
-    private Handler mHandler = new Handler() {
-        private int count = 0;
-
-        public void handleMessage(android.os.Message msg) {
-            MotionEvent ev = (MotionEvent) msg.obj;
-            mViewFlow.onInterceptTouchEvent(ev);
-            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                count = 0;
-                msg.obj = ev;
-                ev.setAction(MotionEvent.ACTION_MOVE);
-                sendMessage(msg);
-            } else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-                count += 1;
-                msg.obj = ev;
-                if (count > 20) {
-                    sendMessage(msg);
-                    ev.setAction(MotionEvent.ACTION_UP);
-                } else {
-                    ev.setAction(MotionEvent.ACTION_MOVE);
-                    ev.setLocation(ev.getX() + 5, ev.getY());
-                }
-            } else if (ev.getAction() == MotionEvent.ACTION_UP) {
-                count = 0;
-            }
-        };
-    };
-
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -111,91 +71,29 @@ public class MainActivity extends Activity {
             break;
 
         case R.id.speekButton:
-            TaskViewManager.performSpeechClick((Button) v);
+            if (mViewFlow.getSelectedItemPosition() > 0) {
+                TaskViewManager.performSpeechClick((Button) v);
+            } else {
+                IFlySpeechUtil.startRecoginze(ETheAiType.All, new IRecoginzeResult() {
+
+                    @Override
+                    public void onCallback(SpeechError error, int confidence, String result) {
+                        if (null != error) {
+                            ToastUtil.showToast("无法识别命令");
+                        } else {
+                            boolean needOpenTaskScreen = TaskViewManager.executeTask(error, confidence, result);
+                            if (needOpenTaskScreen) {
+                                mViewFlow.snapToScreen(1);
+                            }
+                        }
+                    }
+                });
+            }
             break;
 
         default:
             break;
         }
-
-        // startRecoginze(ETheAiType.App);
-        // mViewAnimator.setDisplayedChild(1);
-    }
-
-    @Override
-    public void onBackPressed() {
-        // if (mViewAnimator.getDisplayedChild() != 0) {
-        // mViewAnimator.setDisplayedChild(0);
-        // } else {
-        super.onBackPressed();
-        // }
-    }
-
-    public void startRecoginze(final ETheAiType eTheAiType) {
-        final BaseTheAi bta = TheAiManager.getInstance().getTheAi(eTheAiType);
-
-        if (bta.getIsNeedUploadKeys()) {
-            UploadDialog uploadDialog = new UploadDialog(this, "appid=" + SPUtil.getString(Constant.SP_KEY_XUNFEI_APP_ID, null));
-            uploadDialog.setListener(new UploadDialogListener() {
-
-                @Override
-                public void onEnd(SpeechError error) {
-                    if (null != error) {
-                        ToastUtil.showToast("数据上传错误：" + error);
-                    }
-                }
-
-                @Override
-                public void onDataUploaded(String arg0, String grammarID) {
-                    bta.setGrammarID(grammarID);
-                    bta.setIsNeedUploadKeys(false);
-                    startRecoginze(eTheAiType);
-                }
-            });
-            String keys = bta.getKeysString();
-            try {
-                uploadDialog.setContent(keys.getBytes("UTF-8"), "dtt=keylist", bta.getGrammarName());
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            uploadDialog.show();
-        } else {
-            RecognizerDialog rd = new RecognizerDialog(this, "appid=" + SPUtil.getString(Constant.SP_KEY_XUNFEI_APP_ID, null));
-            rd.setListener(new RecognizerDialogListener() {
-
-                StringBuilder sb = new StringBuilder();
-
-                @Override
-                public void onResults(ArrayList<RecognizerResult> results, boolean isLast) {
-                    if (null != results && results.size() > 0) {
-                        sb.append(results.get(0).text);
-                    }
-                    if (isLast) {
-                        String ret = sb.toString();
-                        onResult(ret);
-                        sb = new StringBuilder();
-                    }
-                }
-
-                @Override
-                public void onEnd(SpeechError error) {
-                    if (null != error) {
-                        ToastUtil.showToast("识别错误：" + error);
-                    }
-                }
-            });
-            String engine = null;
-            String grammarID = bta.getGrammarID();
-            if (null == grammarID) {
-                engine = "sms";
-            }
-            rd.setEngine(engine, null, bta.getGrammarID());
-            rd.show();
-        }
-    }
-
-    public void onResult(String str) {
-        ToastUtil.showToast(str);
     }
 
     public static class ContentAdapter extends BaseAdapter {
