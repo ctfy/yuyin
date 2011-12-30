@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/car_logo_dial" />
+                android:src="@drawable/car_ic_call" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/car_logo_dial" />
+                android:src="@drawable/car_ic_sms" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/car_logo_dial" />
+                android:src="@drawable/car_ic_app"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/car_logo_dial" />
+                android:src="@drawable/car_ic_search" />
 
             <TextView
                 android:layout_width="wrap_content"

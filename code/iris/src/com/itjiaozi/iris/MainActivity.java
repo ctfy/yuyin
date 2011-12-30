@@ -25,6 +25,7 @@ import com.itjiaozi.iris.view.task.TaskViewCall;
 import com.itjiaozi.iris.view.task.TaskViewManager;
 import com.itjiaozi.iris.view.task.TaskViewMessage;
 import com.itjiaozi.iris.view.task.TaskViewOpenApp;
+import com.itjiaozi.iris.view.task.TaskViewWebSearch;
 
 public class MainActivity extends Activity {
     ViewFlow mViewFlow;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity {
         TaskViewManager.addTaskView("打电话", new TaskViewCall(this, null));
         TaskViewManager.addTaskView("发短信", new TaskViewMessage(this, null));
         TaskViewManager.addTaskView("打开应用", new TaskViewOpenApp(this, null));
+        TaskViewManager.addTaskView("网络搜索", new TaskViewWebSearch(this, null));
         ContentAdapter ca = new ContentAdapter();
         ca.addItemView(View.inflate(this, R.layout.itjiaozi_the_main_view_animator_child_btns, null));
         ca.addItemView(TaskViewManager.getManagerView());
@@ -65,7 +67,7 @@ public class MainActivity extends Activity {
 
             break;
         case R.id.itjiaozi_the_main_view_animator_child_btns_websearch:
-            // TaskViewManager.setDisplayTaskView("网络搜索");
+             TaskViewManager.setDisplayTaskView("网络搜索");
             mViewFlow.snapToScreen(1);
 
             break;

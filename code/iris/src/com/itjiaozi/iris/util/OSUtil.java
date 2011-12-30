@@ -1,5 +1,8 @@
 package com.itjiaozi.iris.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,6 +25,17 @@ public class OSUtil {
             ttt = packageManager.getLaunchIntentForPackage(appPackage);
             TheApplication.getInstance().startActivity(ttt);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void startBroswerSearch(String keyword) {
+        try {
+            String strUri = String.format("http://www.baidu.com/s?wd=%s", URLEncoder.encode(keyword, "utf-8"));
+            Uri uri = Uri.parse(strUri);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            TheApplication.getInstance().getCurrentActivity().startActivity(intent);
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
