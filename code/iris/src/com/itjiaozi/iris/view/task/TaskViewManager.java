@@ -26,6 +26,8 @@ public class TaskViewManager {
     public static boolean isDeclared() {
         return null != mViewAnimator;
     }
+    
+    private static boolean hasInit = false;
 
     private static ViewAnimator mViewAnimator;
     private static HashMap<String, View> maps = new HashMap<String, View>();
@@ -33,6 +35,10 @@ public class TaskViewManager {
     private static String currentSelectTaskViewName = null;
 
     public static void init(Activity context) {
+        if (hasInit) {
+            throw new IllegalAccessError("已经初始化过，请勿重复调用");
+        }
+        hasInit = true;    
         mViewAnimator = new ViewAnimator(context);
     }
 
@@ -102,10 +108,11 @@ public class TaskViewManager {
     /***
      * 清空状态
      */
-    public static void close() {
+    public static void unInit() {
         indexs.clear();
         maps.clear();
         mViewAnimator = null;
+        hasInit = false;
     }
 
     public static ViewAnimator getManagerView() {

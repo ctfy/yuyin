@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void finish() {
+        TaskViewManager.unInit();
         TheApplication.getInstance().setCurrentActivity(null);
         super.finish();
     }
