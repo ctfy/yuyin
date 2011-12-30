@@ -11,6 +11,10 @@ import com.itjiaozi.iris.TheApplication;
 
 public class OSUtil {
     public static void startCall(String phoneNumber) {
+        if (null == phoneNumber || "".equals(phoneNumber)) {
+            return;
+        }
+
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction("android.intent.action.CALL");

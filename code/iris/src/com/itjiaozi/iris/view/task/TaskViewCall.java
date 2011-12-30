@@ -1,8 +1,9 @@
 package com.itjiaozi.iris.view.task;
 
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.Contacts;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,11 +19,16 @@ import com.itjiaozi.iris.db.TbContactCache;
 import com.itjiaozi.iris.util.IFlySpeechUtil;
 import com.itjiaozi.iris.util.IFlySpeechUtil.IRecoginzeResult;
 import com.itjiaozi.iris.util.OSUtil;
+import com.itjiaozi.iris.util.TaskUtil;
+import com.itjiaozi.iris.util.ToastUtil;
 
 public class TaskViewCall extends LinearLayout implements ITaskView, OnClickListener {
 
     AutoCompleteTextView editTextContact;
     Button buttonCall;
+
+    private String needCallContactName;
+    private String needCallContactNumber;
 
     public TaskViewCall(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,8 +49,21 @@ public class TaskViewCall extends LinearLayout implements ITaskView, OnClickList
 
             @Override
             public void onCallback(SpeechError error, int confidence, String result) {
-                editTextContact.setText(result);
+                result = TaskUtil.searchContactNameForCall(result);
+                List<TbContactCache> list = TbContactCache.queryContacts(result);
+                if (list.size() > 0) {
+                    needCallContactName = list.get(0).FullName;
+                    needCallContactNumber = list.get(0).Number;
+                } else {
+                    needCallContactName = "";
+                    needCallContactNumber = "";
+                }
+                editTextContact.setText(needCallContactName + "\t\t" + needCallContactNumber);
                 btn.setText("点击说话");
+
+                if (confidence > 45) {
+                    OSUtil.startCall(needCallContactNumber);
+                }
             }
         });
     }
@@ -61,7 +80,9 @@ public class TaskViewCall extends LinearLayout implements ITaskView, OnClickList
 
     @Override
     public void onClick(View arg0) {
-        String text = editTextContact.getText().toString();
-        OSUtil.startCall(text);
+        if (null == needCallContactNumber || "".equals(needCallContactNumber)) {
+            return;
+        }
+        OSUtil.startCall(needCallContactNumber);
     }
 }

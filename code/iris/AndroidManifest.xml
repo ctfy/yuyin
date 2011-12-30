@@ -60,9 +60,9 @@
 
         <activity
             android:name=".MainActivity"
-            
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-            android:label="@string/app_name" >
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

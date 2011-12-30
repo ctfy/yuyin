@@ -116,7 +116,17 @@ public class TbContactCache extends EABaseModel {
     }
 
     public static Cursor queryContactsCursor(String nameKeywords) {
-        Cursor cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + " like ?", new String[] {"%" + nameKeywords + "%"}, null, null, null);
+        if (null == nameKeywords) {
+            nameKeywords = "";
+        }
+        nameKeywords = nameKeywords.trim();
+
+        Cursor cursor = null;
+        if (null == nameKeywords || "".equals(nameKeywords)) {
+            cursor = EADbHelper.getInstance().query(TB_NAME, null, null, null, null, null, null);
+        } else {
+            cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.PinYin + " like ?", new String[] { "%" + Pinyin.getPingYin(nameKeywords) + "%" }, null, null, null);
+        }
         return cursor;
     }
 

@@ -1,5 +1,7 @@
 package com.itjiaozi.iris.view.task;
 
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.AttributeSet;
@@ -17,8 +19,10 @@ import com.itjiaozi.iris.adapter.ContactListAdapter;
 import com.itjiaozi.iris.ai.ETheAiType;
 import com.itjiaozi.iris.db.TbContactCache;
 import com.itjiaozi.iris.util.IFlySpeechUtil;
-import com.itjiaozi.iris.util.OSUtil;
+import com.itjiaozi.iris.util.TaskUtil;
+import com.itjiaozi.iris.util.ToastUtil;
 import com.itjiaozi.iris.util.IFlySpeechUtil.IRecoginzeResult;
+import com.itjiaozi.iris.util.OSUtil;
 
 public class TaskViewMessage extends LinearLayout implements ITaskView, OnClickListener {
     AutoCompleteTextView editTextContact;
@@ -49,17 +53,34 @@ public class TaskViewMessage extends LinearLayout implements ITaskView, OnClickL
         });
     }
 
+    private IRecoginzeResult mIRecoginzeResult = new IRecoginzeResult() {
+
+        @Override
+        public void onCallback(SpeechError error, int confidence, String result) {
+            if (editTextContact.hasFocus()) {
+                result = TaskUtil.searchContactNameForMessage(result);
+                List<TbContactCache> list = TbContactCache.queryContacts(result);
+                if (list.size() > 0) {
+                    needSendMessageContactName = list.get(0).FullName;
+                    needSendMessageContactNumber = list.get(0).Number;
+                } else {
+                    needSendMessageContactName = "";
+                    needSendMessageContactNumber = "";
+                }
+                editTextContact.setText(needSendMessageContactName + "\t\t" + needSendMessageContactNumber);
+            } else {
+                editTextMessageContent.getText().append(result + " ");
+            }
+        }
+    };
+
     @Override
     public void onSpeechBtnClick(final Button btn) {
-        btn.setText("请说联系人");
-        IFlySpeechUtil.startRecoginze(ETheAiType.Call, new IRecoginzeResult() {
-
-            @Override
-            public void onCallback(SpeechError error, int confidence, String result) {
-                editTextContact.setText(result);
-                btn.setText("点击说话");
-            }
-        });
+        if (editTextContact.hasFocus()) {
+            IFlySpeechUtil.startRecoginze(ETheAiType.Message, mIRecoginzeResult);
+        } else {
+            IFlySpeechUtil.startRecoginze(mIRecoginzeResult);
+        }
     }
 
     @Override
@@ -71,9 +92,16 @@ public class TaskViewMessage extends LinearLayout implements ITaskView, OnClickL
 
     @Override
     public void onClick(View v) {
+        if (editTextContact.hasFocus()) {
+            ToastUtil.showToast("联系人");
+        }
+        if (editTextMessageContent.hasFocus()) {
+            ToastUtil.showToast("内容");
+        }
+
         String content = editTextMessageContent.getText().toString();
         if (!"".equals(content) && null != needSendMessageContactNumber) {
-            OSUtil.startSysMessage(content, needSendMessageContactNumber, "1234");
+            OSUtil.startSysMessage(content, needSendMessageContactNumber);
         }
     }
 }

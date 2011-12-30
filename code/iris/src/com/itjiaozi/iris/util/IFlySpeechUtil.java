@@ -101,4 +101,47 @@ public class IFlySpeechUtil {
             rd.show();
         }
     }
+
+    public static void startRecoginze(final IRecoginzeResult callback) {
+        RecognizerDialog rd = new RecognizerDialog(TheApplication.getInstance().getCurrentActivity(), "appid=" + SPUtil.getString(Constant.SP_KEY_XUNFEI_APP_ID, null));
+        rd.setListener(new RecognizerDialogListener() {
+            StringBuilder sb = new StringBuilder();
+            int confidenceTotal = 0;
+            int resultCount = 0;
+
+            @Override
+            public void onResults(ArrayList<RecognizerResult> results, boolean isLast) {
+                if (null != results && results.size() > 0) {
+                    sb.append(results.get(0).text);
+                    confidenceTotal += results.get(0).confidence;
+                    resultCount += 1;
+                }
+                if (isLast) {
+                    String recognizeStr = sb.toString();
+                    int confidence = confidenceTotal / resultCount;
+                    ToastUtil.showToast("识别结果（识别率=" + confidence + "）：" + sb + "");
+
+                    if (null != callback) {
+                        callback.onCallback(null, confidence, recognizeStr);
+                    }
+                    sb = new StringBuilder();
+                    confidenceTotal = 0;
+                    resultCount = 0;
+                }
+            }
+
+            @Override
+            public void onEnd(SpeechError error) {
+                if (null != error) {
+                    ToastUtil.showToast("识别错误：" + error);
+
+                    if (null != callback) {
+                        callback.onCallback(error, 0, null);
+                    }
+                }
+            }
+        });
+        rd.setEngine("sms", null, null);
+        rd.show();
+    }
 }
