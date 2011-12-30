@@ -94,7 +94,7 @@ public class TbContactCache extends EABaseModel {
         List<TbContactCache> list = new ArrayList<TbContactCache>();
         Cursor c = null;
         try {
-            c = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + "=?", new String[] { fullname }, null, null, null);
+            c = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + " like ?", new String[] { fullname }, null, null, null);
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 TbContactCache cc = new TbContactCache();
                 cc._id = c.getLong(c.getColumnIndex(Columns._id));
@@ -115,6 +115,11 @@ public class TbContactCache extends EABaseModel {
         return list;
     }
 
+    public static Cursor queryContactsCursor(String nameKeywords) {
+        Cursor cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + " like %?%", new String[] { nameKeywords }, null, null, null);
+        return cursor;
+    }
+
     public static List<String> queryContactFullNames() {
         List<String> list = new ArrayList<String>();
         Cursor c = null;
@@ -130,5 +135,15 @@ public class TbContactCache extends EABaseModel {
             }
         }
         return list;
+    }
+
+    public static TbContactCache parseCursor(Cursor cursor) {
+        TbContactCache cc = new TbContactCache();
+        cc._id = cursor.getLong(cursor.getColumnIndex(Columns._id));
+        cc.BeUsedCount = cursor.getInt(cursor.getColumnIndex(Columns.BeUsedCount));
+        cc.FullName = cursor.getString(cursor.getColumnIndex(Columns.FullName));
+        cc.Number = cursor.getString(cursor.getColumnIndex(Columns.Number));
+        cc.PinYin = cursor.getString(cursor.getColumnIndex(Columns.PinYin));
+        return cc;
     }
 }

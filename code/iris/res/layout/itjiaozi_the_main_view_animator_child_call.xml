@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/button1"
         android:layout_toRightOf="@+id/textView1"
-        android:layout_weight="1"
+        android:completionThreshold="1"
         android:hint="联系人" />
 
     <ListView

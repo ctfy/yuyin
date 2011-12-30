@@ -1,5 +1,7 @@
 package com.itjiaozi.iris.adapter;
 
+import com.itjiaozi.iris.db.TbContactCache;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,39 +25,29 @@ public class ContactListAdapter extends CursorAdapter implements Filterable {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final TextView view = (TextView) inflater.inflate(android.R.layout.simple_dropdown_item_1line, parent, false);
-        view.setText(cursor.getString(5));
+
+        TbContactCache tbc = TbContactCache.parseCursor(cursor);
+        String text = String.format("%s\t\t%s", tbc.FullName, tbc.Number);
+        view.setText(text);
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ((TextView) view).setText(cursor.getString(5));
+        TbContactCache tbc = TbContactCache.parseCursor(cursor);
+        String text = String.format("%s\t\t%s", tbc.FullName, tbc.Number);
+        ((TextView) view).setText(text);
     }
 
     @Override
     public String convertToString(Cursor cursor) {
-        return cursor.getString(5);
+        TbContactCache tbc = TbContactCache.parseCursor(cursor);
+        String text = String.format("%s\t\t%s", tbc.FullName, tbc.Number);
+        return text;
     }
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-        if (getFilterQueryProvider() != null) {
-            return getFilterQueryProvider().runQuery(constraint);
-        }
-
-        StringBuilder buffer = null;
-        String[] args = null;
-        if (constraint != null) {
-            buffer = new StringBuilder();
-            buffer.append("UPPER(");
-            buffer.append(Contacts.ContactMethods.NAME);
-            buffer.append(") GLOB ?");
-            args = new String[] { constraint.toString().toUpperCase() + "*" };
-        }
-
-        return mContent.query(Contacts.People.CONTENT_URI, PEOPLE_PROJECTION, buffer == null ? null : buffer.toString(), args, Contacts.People.DEFAULT_SORT_ORDER);
+        return TbContactCache.queryContactsCursor(constraint + "");
     }
-
-    public static final String[] PEOPLE_PROJECTION = new String[] { Contacts.People._ID, Contacts.People.PRIMARY_PHONE_ID, Contacts.People.TYPE, Contacts.People.NUMBER,
-            Contacts.People.LABEL, Contacts.People.NAME, };
 }
