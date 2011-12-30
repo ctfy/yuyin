@@ -3,13 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/button1"
         android:layout_weight="1"
-        android:focusable="false"
+        android:completionThreshold="1"
         android:hint="应用名" />
 
     <ListView

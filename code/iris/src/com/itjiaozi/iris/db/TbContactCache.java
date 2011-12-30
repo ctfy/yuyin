@@ -116,7 +116,7 @@ public class TbContactCache extends EABaseModel {
     }
 
     public static Cursor queryContactsCursor(String nameKeywords) {
-        Cursor cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + " like %?%", new String[] { nameKeywords }, null, null, null);
+        Cursor cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.FullName + " like ?", new String[] {"%" + nameKeywords + "%"}, null, null, null);
         return cursor;
     }
 

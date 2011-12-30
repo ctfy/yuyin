@@ -14,11 +14,12 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 public class ContactListAdapter extends CursorAdapter implements Filterable {
-    private ContentResolver mContent;
+
+    public static final int VIEW_TYPE_CONTACT_NAME = 0xFF0123F1;
+    public static final int VIEW_TYPE_CONTACT_NUMBER = 0xFF0123F2;
 
     public ContactListAdapter(Context context, Cursor c) {
         super(context, c);
-        mContent = context.getContentResolver();
     }
 
     @Override
@@ -28,6 +29,8 @@ public class ContactListAdapter extends CursorAdapter implements Filterable {
 
         TbContactCache tbc = TbContactCache.parseCursor(cursor);
         String text = String.format("%s\t\t%s", tbc.FullName, tbc.Number);
+        view.setTag(VIEW_TYPE_CONTACT_NAME, tbc.FullName);
+        view.setTag(VIEW_TYPE_CONTACT_NUMBER, tbc.Number);
         view.setText(text);
         return view;
     }
@@ -36,6 +39,8 @@ public class ContactListAdapter extends CursorAdapter implements Filterable {
     public void bindView(View view, Context context, Cursor cursor) {
         TbContactCache tbc = TbContactCache.parseCursor(cursor);
         String text = String.format("%s\t\t%s", tbc.FullName, tbc.Number);
+        view.setTag(VIEW_TYPE_CONTACT_NAME, tbc.FullName);
+        view.setTag(VIEW_TYPE_CONTACT_NUMBER, tbc.Number);
         ((TextView) view).setText(text);
     }
 

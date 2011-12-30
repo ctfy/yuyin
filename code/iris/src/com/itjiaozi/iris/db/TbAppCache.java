@@ -90,6 +90,13 @@ public class TbAppCache extends EABaseModel {
         return count;
     }
 
+    public static Cursor queryLikeAppCursorByName(String name) {
+        String appNamePinyin = Pinyin.getPingYin(name);
+        Cursor cursor = EADbHelper.getInstance().query(TB_NAME, null, Columns.PinYin + " like ?", new String[] { "%" + appNamePinyin + "%" }, null, null,
+                Columns.BeUsedCount + " DESC");
+        return cursor;
+    }
+
     public static List<TbAppCache> queryLikeAppByName(String name) {
         String appNamePinyin = Pinyin.getPingYin(name);
         AppLog.d(TAG, String.format("查找应用:%s, \t拼音:%s", name, appNamePinyin));
@@ -143,5 +150,16 @@ public class TbAppCache extends EABaseModel {
             }
         }
         return list;
+    }
+
+    public static TbAppCache parseCursor(Cursor cursor) {
+        TbAppCache tmp = new TbAppCache();
+        tmp._id = cursor.getLong(cursor.getColumnIndex(Columns._id));
+        tmp.BeUsedCount = cursor.getInt(cursor.getColumnIndex(Columns.BeUsedCount));
+        tmp.IconPath = cursor.getString(cursor.getColumnIndex(Columns.IconPath));
+        tmp.Name = cursor.getString(cursor.getColumnIndex(Columns.Name));
+        tmp.PackageName = cursor.getString(cursor.getColumnIndex(Columns.PackageName));
+        tmp.PinYin = cursor.getString(cursor.getColumnIndex(Columns.PinYin));
+        return tmp;
     }
 }

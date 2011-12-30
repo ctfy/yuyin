@@ -39,4 +39,25 @@ public class OSUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 调用系统发短信功能
+     */
+    public static void startSysMessage(String content, String... numbers) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("smsto://");
+        if (null != numbers) {
+            for (int i = 0; i < numbers.length; i++) {
+                if (i < numbers.length - 1) {
+                    sb.append(numbers[i] + ",");
+                } else {
+                    sb.append(numbers[i]);
+                }
+            }
+        }
+        Uri smsToUri = Uri.parse(sb + "");
+        Intent intent = new Intent(android.content.Intent.ACTION_SENDTO, smsToUri);
+        intent.putExtra("sms_body", content);
+        TheApplication.getInstance().getCurrentActivity().startActivity(intent);
+    }
 }
