@@ -33,7 +33,9 @@ public class IFlySpeechUtil {
                     if (null != error) {
                         ToastUtil.showToast("数据上传错误：" + error);
                     }
-                    callback.onCallback(error, 0, null);
+                    if (null != callback) {
+                        callback.onCallback(error, 0, null);
+                    }
                 }
 
                 @Override
@@ -70,8 +72,9 @@ public class IFlySpeechUtil {
                         int confidence = confidenceTotal / resultCount;
                         ToastUtil.showToast("识别结果（识别率=" + confidence + "）：" + sb + "");
 
-                        callback.onCallback(null, confidence, recognizeStr);
-
+                        if (null != callback) {
+                            callback.onCallback(null, confidence, recognizeStr);
+                        }
                         sb = new StringBuilder();
                         confidenceTotal = 0;
                         resultCount = 0;
@@ -82,7 +85,10 @@ public class IFlySpeechUtil {
                 public void onEnd(SpeechError error) {
                     if (null != error) {
                         ToastUtil.showToast("识别错误：" + error);
-                        callback.onCallback(error, 0, null);
+
+                        if (null != callback) {
+                            callback.onCallback(error, 0, null);
+                        }
                     }
                 }
             });

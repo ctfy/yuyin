@@ -122,6 +122,7 @@ public class TaskViewManager {
 
     public static boolean executeTask(SpeechError error, int confidence, String result) {
         {
+            result += "";
             jregex.Pattern pattern = new Pattern("打电话给({name}.*)");
             jregex.Matcher matcher = pattern.matcher(result);
             if (matcher.find()) {

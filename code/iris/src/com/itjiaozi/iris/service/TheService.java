@@ -1,6 +1,7 @@
 package com.itjiaozi.iris.service;
 
 import com.itjiaozi.iris.about.TheContacts;
+import com.itjiaozi.iris.util.SPUtil;
 
 import android.app.Service;
 import android.content.Intent;
@@ -22,6 +23,7 @@ public class TheService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, mContactsObserver);
         getContentResolver().registerContentObserver(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, true, mContactsObserver);
 
@@ -30,8 +32,12 @@ public class TheService extends Service {
     private static ContentObserver mContactsObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            Log.d(TAG, "contacts changed");
-            TheContacts.syncContacts(true);
+            long lastTime = SPUtil.getLong(getClass().getName() + "_last_sync", 0);
+            if (System.currentTimeMillis() - lastTime > 1000 * 60 * 60) {
+                Log.d(TAG, "contacts changed");
+                TheContacts.syncContacts(true);
+                SPUtil.put(getClass().getName() + "_last_sync", System.currentTimeMillis());
+            }
         }
     };
 
