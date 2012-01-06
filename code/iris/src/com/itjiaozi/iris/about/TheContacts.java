@@ -52,6 +52,9 @@ public class TheContacts {
                     while (phoneCursor.moveToNext()) {
                         TbContactCache cc = new TbContactCache();
                         String strPhoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)); // 手机号码字段联系人可能不止一个
+                        if (null == strPhoneNumber) {
+                            strPhoneNumber = "";
+                        }
                         cc.FullName = fullName;
                         cc.PinYin = pinyin;
                         cc.Number = strPhoneNumber;
