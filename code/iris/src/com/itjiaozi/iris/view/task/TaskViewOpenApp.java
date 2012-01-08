@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -109,6 +110,16 @@ public class TaskViewOpenApp extends LinearLayout implements ITaskView, OnClickL
         if (null != needOpenPackage) {
             OSUtil.startApp(needOpenPackage);
         }
+    }
+
+    @Override
+    public void wakeUp() {
+        StringBuilder helpSb = new StringBuilder();
+        helpSb.append("输入联系人：键入或说出应用的名字<br/>");
+        helpSb.append("然后点击\"打开\"</br>");
+        helpSb.append("例如：</br>");
+        helpSb.append("打开<a href='#'>录音机</a>");
+        TaskViewManager.getHelpTextView().setText(Html.fromHtml(helpSb.toString()));
     }
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itjiaozi.iris"
+    android:sharedUserId="com.itjiaozi"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -13,34 +14,24 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.USE_SIP" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
     <uses-permission android:name="android.permission.BROADCAST_WAP_PUSH" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
     <uses-permission android:name="com.android.mails.permission.UPDATE_MESSAGE" />
     <uses-permission android:name="com.android.email.permission.ACCESS_PROVIDER" />
@@ -48,21 +39,32 @@
     <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAG" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="TheApplication"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/iris_icon_lephone"
         android:label="@string/app_name" >
         <service android:name=".service.TheService" >
         </service>
 
+        <!-- 配置友盟统计代码 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="4f09863c5270157bd2000027" />
+
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,6 +90,187 @@
                 <!-- 注意！！ 这句必须要加，否则接收不到BroadCast -->
             </intent-filter>
         </receiver>
+
+        <!-- 声明有米的Activity -->
+        <activity
+            android:name="net.youmi.android.AdActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+        <activity
+            android:name="net.youmi.android.spotad.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+
+        <!-- 声明多盟的Activity -->
+        <activity
+            android:name="cn.domob.android.ads.DomobActivity"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <!-- 声明安沃的Activity -->
+        <activity
+            android:name="com.adwo.adsdk.AdwoAdBrowserActivity"
+            android:label="@string/app_name" />
+        <!-- 安沃全屏广告 -->
+        <activity
+            android:name="com.adwo.adsdk.AdwoSplashAdActivity"
+            android:label="@string/app_name" />
+
+        <!-- 声明Vpon的Activity -->
+        <activity
+            android:name="com.vpon.adon.android.WebInApp"
+            android:configChanges="orientation|keyboardHidden|navigation|keyboard"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vpon.adon.android.CrazyAdRun"
+            android:configChanges="orientation|keyboardHidden|navigation|keyboard"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.vpon.adon.android.webClientHandler.QRActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboardHidden|navigation|keyboard"
+            android:finishOnTaskLaunch="true" />
+        <activity
+            android:name="com.vpon.adon.android.webClientHandler.ShootActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboardHidden|navigation|keyboard"
+            android:finishOnTaskLaunch="true" />
+        <activity
+            android:name="com.google.zxing.client.android.HelpActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboardHidden|navigation|keyboard"
+            android:finishOnTaskLaunch="true" />
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:finishOnTaskLaunch="true"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- Vpon end! -->
+
+
+        <!-- 声明AdMob的Activity -->
+        <activity
+            android:name="com.google.ads.AdActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+
+        <!-- 声明AdChina的Activity -->
+        <activity
+            android:name="com.adchina.android.ads.views.AdBrowserView"
+            android:label="@string/app_name" />
+
+        <!-- 声明AppMedia的Activity -->
+        <activity
+            android:name="cn.appmedia.ad.AdActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|keyboard"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <!-- 声明赢告的Activity -->
+        <activity android:name="com.winad.android.ads.VideoPlayerActivity" />
+
+        <!-- 声明Greystripe的Activity -->
+        <provider
+            android:name="com.greystripe.android.sdk.AdContentProvider"
+            android:authorities="com.yourcompany.AdContentProvider"
+            android:exported="false"
+            android:multiprocess="true" />
+
+        <activity
+            android:name="com.greystripe.android.sdk.AdView"
+            android:configChanges="keyboard|keyboardHidden|orientation" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 声明MdotM的Activity -->
+        <activity
+            android:name="com.mdotm.android.ads.MdotmLandingPage"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <!-- 声明Millennial的Activity -->
+        <activity
+            android:name="com.millennialmedia.android.MMAdViewOverlayActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.millennialmedia.android.VideoPlayer"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <!-- 声明AirAD的Activity -->
+        <activity
+            android:name="com.mt.airad.MultiAD"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+
+        <!-- 声明LSense的Activity -->
+        <activity
+            android:name="com.l.adlib_android.AdBrowseActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- 声明力美的Activity -->
+        <activity
+            android:name="com.lmmob.ad.sdk.LmMobAdWebView"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name="com.lmmob.ad.sdk.LmMobFullImageActivity"
+            android:configChanges="keyboardHidden|orientation" />
+
+        <!-- 添加百度应用详情Activity -->
+        <meta-data
+            android:name="Market_ID"
+            android:value="1" />
+
+        <activity
+            android:name="com.baidu.AppActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+
+        <!-- 您从百度移动联盟网站获取的APP ID -->
+        <meta-data
+            android:name="BaiduMobAd_APP_ID"
+            android:value="debug" />
+        <!-- 您从百度移动联盟网站获取的计费名 -->
+        <meta-data
+            android:name="BaiduMobAd_APP_SEC"
+            android:value="debug" />
+
+        <!-- 声明聚赢的Activity -->
+        <activity android:name="com.tencent.mobwin.MobinWINBrowserActivity" />
+
+        <!-- 声明赢时的Activity -->
+        <activity
+            android:name="net.winsmedia.WebViewActivity"
+            android:configChanges="orientation|keyboardHidden" />
+
+        <!-- 添加随踪AdActivity -->
+        <activity
+            android:name="com.suizong.mobplate.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
+
+        <!-- 注册Service，自主广告与交换广告的应用下载功能所需 -->
+        <service
+            android:name="com.admogo.UpdateService"
+            android:exported="true"
+            android:process=":remote" />
+
+        <meta-data
+            android:name="ADMOGO_KEY"
+            android:value="5dc6b75be998489095b532f184072220" />
+        <activity android:name="AdActivity"></activity>
     </application>
 
 </manifest>

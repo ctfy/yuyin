@@ -7,14 +7,18 @@ import jregex.Pattern;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.iflytek.speech.SpeechError;
+import com.itjiaozi.iris.Constant;
+import com.itjiaozi.iris.MainActivity;
 import com.itjiaozi.iris.about.TheApps;
 import com.itjiaozi.iris.about.TheContacts;
 import com.itjiaozi.iris.db.TbAppCache;
 import com.itjiaozi.iris.db.TbContactCache;
 import com.itjiaozi.iris.util.OSUtil;
+import com.mobclick.android.MobclickAgent;
 
 public class TaskViewManager {
 
@@ -26,7 +30,7 @@ public class TaskViewManager {
     public static boolean isDeclared() {
         return null != mViewAnimator;
     }
-    
+
     private static boolean hasInit = false;
 
     private static ViewAnimator mViewAnimator;
@@ -34,11 +38,14 @@ public class TaskViewManager {
     private static HashMap<String, Integer> indexs = new HashMap<String, Integer>();
     private static String currentSelectTaskViewName = null;
 
-    public static void init(Activity context) {
+    private static MainActivity mMainActivity;
+
+    public static void init(MainActivity context) {
+        mMainActivity = context;
         if (hasInit) {
             throw new IllegalAccessError("已经初始化过，请勿重复调用");
         }
-        hasInit = true;    
+        hasInit = true;
         mViewAnimator = new ViewAnimator(context);
     }
 
@@ -95,6 +102,7 @@ public class TaskViewManager {
         Integer index = indexs.get(taskname);
         mViewAnimator.setDisplayedChild(index);
         currentSelectTaskViewName = taskname;
+        getTaskViewInterface(taskname).wakeUp();
     }
 
     public static void setDisplayTaskView(String taskname, String... args) {
@@ -102,6 +110,7 @@ public class TaskViewManager {
         mViewAnimator.setDisplayedChild(index);
         currentSelectTaskViewName = taskname;
 
+        getTaskViewInterface(taskname).wakeUp();
         getTaskViewInterface(taskname).setData(args);
     }
 
@@ -139,6 +148,7 @@ public class TaskViewManager {
                     OSUtil.startCall(list.get(0).Number);
                     return false;
                 } else {
+                    MobclickAgent.onEvent(mMainActivity, Constant.UMENG_WITCH_TO_TASK_CALL, "通过语音");
                     TaskViewManager.setDisplayTaskView("打电话", name);
                 }
             }
@@ -148,6 +158,7 @@ public class TaskViewManager {
             jregex.Matcher matcher = pattern.matcher(result);
             if (matcher.find()) {
                 String name = matcher.group("name");
+                MobclickAgent.onEvent(mMainActivity, Constant.UMENG_SWITCH_TO_TASK_MESSAGE, "通过语音");
                 TaskViewManager.setDisplayTaskView("发短信", name);
             }
         }
@@ -161,10 +172,15 @@ public class TaskViewManager {
                     OSUtil.startApp(list.get(0).PackageName);
                     return false;
                 } else {
+                    MobclickAgent.onEvent(mMainActivity, Constant.UMENG_SWITCH_TO_TASK_OPENAPP, "通过语音");
                     TaskViewManager.setDisplayTaskView("打开应用", name);
                 }
             }
         }
         return true;
+    }
+
+    public static TextView getHelpTextView() {
+        return mMainActivity.mHelp;
     }
 }

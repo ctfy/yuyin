@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +41,7 @@ public class TaskViewCall extends LinearLayout implements ITaskView, OnClickList
         ContactListAdapter adapter = new ContactListAdapter(getContext(), cursor);
         editTextContact.setAdapter(adapter);
         buttonCall.setOnClickListener(this);
+
     }
 
     @Override
@@ -84,5 +86,13 @@ public class TaskViewCall extends LinearLayout implements ITaskView, OnClickList
             return;
         }
         OSUtil.startCall(needCallContactNumber);
+    }
+
+    @Override
+    public void wakeUp() {
+        StringBuilder helpSb = new StringBuilder();
+        helpSb.append("输入联系人：键入或说出联系人的名字<br/>");
+        helpSb.append("然后点击\"拨打\"");
+        TaskViewManager.getHelpTextView().setText(Html.fromHtml(helpSb.toString()));
     }
 }

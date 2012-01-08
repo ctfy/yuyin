@@ -4,19 +4,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-<!-- 
+
+    <!--
     <org.taptwo.android.widget.CircleFlowIndicator
         android:id="@+id/viewflowindic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dip" /> -->
+        android:padding="10dip" />
+    -->
 
     <org.taptwo.android.widget.ViewFlow
         android:id="@+id/viewflow"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:background="#44FFFFFF" >
     </org.taptwo.android.widget.ViewFlow>
+
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/speekButton"
+        android:paddingBottom="3dp"
+        android:paddingLeft="5dp"
+        android:textColor="#FFF"
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/speekButton"
@@ -28,5 +41,17 @@
         android:text="点击并说话"
         android:textColor="#FFF"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/speekButton"
+        android:layout_alignParentRight="true"
+        android:onClick="onClick"
+        android:padding="4dp"
+        android:text="AD"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="16sp" />
 
 </RelativeLayout>

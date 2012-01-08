@@ -7,6 +7,7 @@ import java.util.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,7 @@ public class TaskViewWebSearch extends LinearLayout implements ITaskView, View.O
     @Override
     public void onSpeechBtnClick(final Button btn) {
         btn.setText("请说要搜索的内容");
-        IFlySpeechUtil.startRecoginze(ETheAiType.Call, new IRecoginzeResult() {
+        IFlySpeechUtil.startRecoginze(new IRecoginzeResult() {
 
             @Override
             public void onCallback(SpeechError error, int confidence, String result) {
@@ -57,5 +58,13 @@ public class TaskViewWebSearch extends LinearLayout implements ITaskView, View.O
     public void onClick(View arg0) {
         String keyword = editTextKeywords.getText().toString();
         OSUtil.startBroswerSearch(keyword);
+    }
+
+    @Override
+    public void wakeUp() {
+        StringBuilder helpSb = new StringBuilder();
+        helpSb.append("通过语音输入或输入法输入<a href='#'>搜索内容</a><br/>");
+        helpSb.append("然后点击\"搜索\"");
+        TaskViewManager.getHelpTextView().setText(Html.fromHtml(helpSb.toString()));
     }
 }

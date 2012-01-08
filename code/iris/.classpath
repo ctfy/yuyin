@@ -5,6 +5,36 @@
 	<classpathentry kind="lib" path="libs/Msc.jar"/>
 	<classpathentry kind="lib" path="libs/jregex1.2_01.jar"/>
 	<classpathentry kind="lib" path="libs/pinyin4j-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/AndroidAnalyticSDK3.1.1.jar"/>
+	<classpathentry kind="lib" path="ad_libs/adchina_android_sdk.jar"/>
+	<classpathentry kind="lib" path="ad_libs/adlib_android.jar"/>
+	<classpathentry kind="lib" path="ad_libs/adOn-3.0.3.jar"/>
+	<classpathentry kind="lib" path="ad_libs/AdsMOGO-SDK-Android.jar"/>
+	<classpathentry kind="lib" path="ad_libs/adtouch-embed-sdk-1.1.0.jar"/>
+	<classpathentry kind="lib" path="ad_libs/adwosdk2.5.1_for_Mogo.jar"/>
+	<classpathentry kind="lib" path="ad_libs/airAD_basic_sdk.jar"/>
+	<classpathentry kind="lib" path="ad_libs/AppMediaAdAndroidSdk-1.0.5-mangguo.jar"/>
+	<classpathentry kind="lib" path="ad_libs/casee-ad-sdk-2.7.jar"/>
+	<classpathentry kind="lib" path="ad_libs/domob_android_sdk-2.0.2.jar"/>
+	<classpathentry kind="lib" path="ad_libs/FtadSdkAndroid.jar"/>
+	<classpathentry kind="lib" path="ad_libs/GoogleAdMobAdsSdk-4.1.1.jar"/>
+	<classpathentry kind="lib" path="ad_libs/gssdk_1.6.0.jar"/>
+	<classpathentry kind="lib" path="ad_libs/httpmime-4.1.2.jar"/>
+	<classpathentry kind="lib" path="ad_libs/InMobiAndroidSDK.jar"/>
+	<classpathentry kind="lib" path="ad_libs/IZPView.jar"/>
+	<classpathentry kind="lib" path="ad_libs/l_android_adsdk.jar"/>
+	<classpathentry kind="lib" path="ad_libs/LMMOB_SDK.1.2.1.jar"/>
+	<classpathentry kind="lib" path="ad_libs/mdotm-sdk-android.jar"/>
+	<classpathentry kind="lib" path="ad_libs/MMAdView.jar"/>
+	<classpathentry kind="lib" path="ad_libs/mobplate-android-sdk-1.0.jar"/>
+	<classpathentry kind="lib" path="ad_libs/smartmad-sdk-android.jar"/>
+	<classpathentry kind="lib" path="ad_libs/SOMAAndroidSDK2.5.3.jar"/>
+	<classpathentry kind="lib" path="ad_libs/Tencent_MobWIN_SDK_1.2.1.jar"/>
+	<classpathentry kind="lib" path="ad_libs/WiAd.jar"/>
+	<classpathentry kind="lib" path="ad_libs/winAd-android-sdk-V2.0.jar"/>
+	<classpathentry kind="lib" path="ad_libs/Winsad-1.1.jar"/>
+	<classpathentry kind="lib" path="ad_libs/youmi-android.jar"/>
+	<classpathentry kind="lib" path="ad_libs/zestadz_sdk_androidv1.2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>

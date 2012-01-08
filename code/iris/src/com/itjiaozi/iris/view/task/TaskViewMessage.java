@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -103,5 +104,14 @@ public class TaskViewMessage extends LinearLayout implements ITaskView, OnClickL
         if (!"".equals(content) && null != needSendMessageContactNumber) {
             OSUtil.startSysMessage(content, needSendMessageContactNumber);
         }
+    }
+
+    @Override
+    public void wakeUp() {
+        StringBuilder helpSb = new StringBuilder();
+        helpSb.append("输入联系人：键入或说出联系人的名字<br/>");
+        helpSb.append("输入内容： 点击\"短信内容\"输入框，语音或输入法输入发送的内容<br/>");
+        helpSb.append("然后点击\"发送\"");
+        TaskViewManager.getHelpTextView().setText(Html.fromHtml(helpSb.toString()));
     }
 }
